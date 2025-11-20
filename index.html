@@ -3,133 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini Macera</title>
+<title>Mini Maskot</title>
 <style>
   body {
+    margin: 0;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(120deg, #fceabb, #f8b500);
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
     text-align: center;
-    padding: 20px;
   }
-  #story {
-    background: rgba(255, 255, 255, 0.8);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    max-width: 600px;
-    margin-bottom: 20px;
-    font-size: 1.1em;
-  }
-  .option {
-    background: #f8b500;
-    border: none;
-    padding: 15px 25px;
-    margin: 10px;
-    border-radius: 10px;
-    font-size: 1em;
+
+  #mascot {
+    font-size: 100px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: transform 0.2s;
   }
-  .option:hover {
-    transform: scale(1.1);
-    background: #fceabb;
+
+  #mascot:hover {
+    transform: scale(1.2) rotate(-10deg);
+  }
+
+  #message {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #333;
+    min-height: 1.5em;
+  }
+
+  .dance {
+    animation: danceMove 0.5s ease-in-out 3;
+  }
+
+  @keyframes danceMove {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px) rotate(-5deg); }
+    50% { transform: translateX(10px) rotate(5deg); }
+    75% { transform: translateX(-10px) rotate(-5deg); }
+    100% { transform: translateX(0); }
   }
 </style>
 </head>
 <body>
 
-<div id="story">Güneşli bir gün, şehirde dolaşıyorsun. Karşında iki yol var: sağa mı sola mı dönüyorsun?</div>
-
-<div id="options">
-  <button class="option" onclick="choose('sağa')">Sağa dön</button>
-  <button class="option" onclick="choose('sola')">Sola dön</button>
-</div>
+<div id="mascot">😺</div>
+<div id="message"></div>
 
 <script>
-let story = document.getElementById('story');
-let options = document.getElementById('options');
+const mascot = document.getElementById('mascot');
+const message = document.getElementById('message');
 
-function choose(choice) {
-  if (story.textContent.includes("Karşında iki yol")) {
-    if (choice === 'sağa') {
-      story.textContent = "Parkta yürüyorsun ve bir köpek sana havlamaya başlıyor. Ne yapıyorsun?";
-      options.innerHTML = `
-        <button class="option" onclick="choose('yaklaş')">Köpeğe yaklaş</button>
-        <button class="option" onclick="choose('kaç')">Kaçarak uzaklaş</button>
-      `;
-    } else {
-      story.textContent = "Kafeye gidiyorsun. Barista sana garip bakıyor. Ne yapıyorsun?";
-      options.innerHTML = `
-        <button class="option" onclick="choose('kahve')">Kahve sipariş et</button>
-        <button class="option" onclick="choose('çık')">Hemen çık</button>
-      `;
-    }
-  } else if (story.textContent.includes("köpek sana havlamaya başlıyor")) {
-    if (choice === 'yaklaş') {
-      story.textContent = "Köpek aslında minik bir robotmuş! Seni arkadaş olarak kabul ediyor. Ne yapacaksın şimdi?";
-      options.innerHTML = `
-        <button class="option" onclick="choose('oyna')">Oyun oyna</button>
-        <button class="option" onclick="choose('gez')">Parkta gezin</button>
-      `;
-    } else {
-      story.textContent = "Koşarken pantolonuna sakız yapışıyor 😅 ve kayboluyorsun. Hikaye burada bitiyor!";
-      options.innerHTML = `
-        <button class="option" onclick="restart()">Başa dön</button>
-      `;
-    }
-  } else if (story.textContent.includes("Kafeye gidiyorsun")) {
-    if (choice === 'kahve') {
-      story.textContent = "Barista sana komik bir kahve sunuyor: içinde minik marshmallow patlayan bir sürpriz! 😆 Ne yapıyorsun?";
-      options.innerHTML = `
-        <button class="option" onclick="choose('iç')">İç</button>
-        <button class="option" onclick="choose('at')">At</button>
-      `;
-    } else {
-      story.textContent = "Dışarı çıktın, yağmur başladı ve şemsiyen yok 😅 komik ama ıslanıyorsun!";
-      options.innerHTML = `
-        <button class="option" onclick="restart()">Başa dön</button>
-      `;
-    }
-  } else if (story.textContent.includes("minik bir robotmuş")) {
-    if (choice === 'oyna') {
-      story.textContent = "Robotla saklambaç oynadınız ve parkta diğer robotlarla tanıştınız 😎 Hikaye mutlu sonla bitti!";
-      options.innerHTML = `
-        <button class="option" onclick="restart()">Başa dön</button>
-      `;
-    } else {
-      story.textContent = "Parkta yürürken bir banka oturup dondurma yiyorsun. Çocuklar sana bakıp gülüyor 😆 Hikaye burada bitti!";
-      options.innerHTML = `
-        <button class="option" onclick="restart()">Başa dön</button>
-      `;
-    }
-  } else if (story.textContent.includes("minik marshmallow")) {
-    if (choice === 'iç') {
-      story.textContent = "Kahveyi içtin, ağzın tatlandı ve barista sana küçük bir şapka hediye etti 😎 Hikaye burada bitti!";
-      options.innerHTML = `
-        <button class="option" onclick="restart()">Başa dön</button>
-      `;
-    } else {
-      story.textContent = "Kahveyi attın, etrafa saçıldı ve insanlar şaşkın 😅 Hikaye burada bitti!";
-      options.innerHTML = `
-        <button class="option" onclick="restart()">Başa dön</button>
-      `;
-    }
-  }
-}
+const messages = [
+  "Merhaba kanka! 😎",
+  "Bak sana göz kırptım! 😉",
+  "Dans zamanı! 💃🕺",
+  "Miyav! 😸",
+  "Sen çok havalısın! 😎",
+  "Ufak bir sürpriz geliyor! 🎉",
+];
 
-function restart() {
-  story.textContent = "Güneşli bir gün, şehirde dolaşıyorsun. Karşında iki yol var: sağa mı sola mı dönüyorsun?";
-  options.innerHTML = `
-    <button class="option" onclick="choose('sağa')">Sağa dön</button>
-    <button class="option" onclick="choose('sola')">Sola dön</button>
-  `;
-}
+mascot.addEventListener('click', () => {
+  // Rastgele mesaj seç
+  const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  message.textContent = randomMessage;
+
+  // Rastgele dans animasyonu
+  mascot.classList.add('dance');
+  setTimeout(() => {
+    mascot.classList.remove('dance');
+  }, 1500);
+});
 </script>
 
 </body>
