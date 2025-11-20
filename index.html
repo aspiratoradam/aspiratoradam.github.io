@@ -71,18 +71,20 @@
     height: 80px;
   }
 
-  /* --- MOBİL DÜZELTMELER --- */
-  @media (max-width: 768px) {
+/* --- MOBİL DÜZELTMELER --- */
+@media (max-width: 768px) {
 
     .ryan-img {
       width: 120px;
       height: 145px;
       opacity: 0.9;
     }
-    #ryan1 { top: 20px; left: 10px; }
-    #ryan2 { bottom: 150px; left: 20px; top: auto; }
-    #ryan3 { top: 20px; right: 10px; }
-    #ryan4 { bottom: 150px; right: 20px; top: auto; }
+
+    /* Tüm görseller mobilde uygun pozisyon */
+    #ryan1 { top: 10px; left: 5%; }
+    #ryan2 { top: 160px; left: 10%; }
+    #ryan3 { top: 10px; right: 5%; }
+    #ryan4 { top: 160px; right: 10%; }
 
     #video-container {
       width: 95%;
@@ -150,3 +152,4 @@ tracks.forEach((id, i) => {
 
 </body>
 </html>
+
