@@ -3,26 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Komik Görsel</title>
+<title>Mini Macera</title>
 <style>
-  html, body {
-    margin: 0;
-    height: 100%;
-  }
   body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(120deg, #fceabb, #f8b500);
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #000;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    padding: 20px;
   }
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Görseli ekrana sığdırır, taşma yapmaz */
+  #story {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    max-width: 600px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+  }
+  .option {
+    background: #f8b500;
+    border: none;
+    padding: 15px 25px;
+    margin: 10px;
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .option:hover {
+    transform: scale(1.1);
+    background: #fceabb;
   }
 </style>
 </head>
 <body>
-  <img src="komik-gorsel.png" alt="Komik Görsel">
+
+<div id="story">Güneşli bir gün, şehirde dolaşıyorsun. Karşında iki yol var: sağa mı sola mı dönüyorsun?</div>
+
+<div id="options">
+  <button class="option" onclick="choose('sağa')">Sağa dön</button>
+  <button class="option" onclick="choose('sola')">Sola dön</button>
+</div>
+
+<script>
+let story = document.getElementById('story');
+let options = document.getElementById('options');
+
+function choose(choice) {
+  if (story.textContent.includes("Karşında iki yol")) {
+    if (choice === 'sağa') {
+      story.textContent = "Parkta yürüyorsun ve bir köpek sana havlamaya başlıyor. Ne yapıyorsun?";
+      options.innerHTML = `
+        <button class="option" onclick="choose('yaklaş')">Köpeğe yaklaş</button>
+        <button class="option" onclick="choose('kaç')">Kaçarak uzaklaş</button>
+      `;
+    } else {
+      story.textContent = "Kafeye gidiyorsun. Barista sana garip bakıyor. Ne yapıyorsun?";
+      options.innerHTML = `
+        <button class="option" onclick="choose('kahve')">Kahve sipariş et</button>
+        <button class="option" onclick="choose('çık')">Hemen çık</button>
+      `;
+    }
+  } else if (story.textContent.includes("köpek sana havlamaya başlıyor")) {
+    if (choice === 'yaklaş') {
+      story.textContent = "Köpek aslında minik bir robotmuş! Seni arkadaş olarak kabul ediyor. Ne yapacaksın şimdi?";
+      options.innerHTML = `
+        <button class="option" onclick="choose('oyna')">Oyun oyna</button>
+        <button class="option" onclick="choose('gez')">Parkta gezin</button>
+      `;
+    } else {
+      story.textContent = "Koşarken pantolonuna sakız yapışıyor 😅 ve kayboluyorsun. Hikaye burada bitiyor!";
+      options.innerHTML = `
+        <button class="option" onclick="restart()">Başa dön</button>
+      `;
+    }
+  } else if (story.textContent.includes("Kafeye gidiyorsun")) {
+    if (choice === 'kahve') {
+      story.textContent = "Barista sana komik bir kahve sunuyor: içinde minik marshmallow patlayan bir sürpriz! 😆 Ne yapıyorsun?";
+      options.innerHTML = `
+        <button class="option" onclick="choose('iç')">İç</button>
+        <button class="option" onclick="choose('at')">At</button>
+      `;
+    } else {
+      story.textContent = "Dışarı çıktın, yağmur başladı ve şemsiyen yok 😅 komik ama ıslanıyorsun!";
+      options.innerHTML = `
+        <button class="option" onclick="restart()">Başa dön</button>
+      `;
+    }
+  } else if (story.textContent.includes("minik bir robotmuş")) {
+    if (choice === 'oyna') {
+      story.textContent = "Robotla saklambaç oynadınız ve parkta diğer robotlarla tanıştınız 😎 Hikaye mutlu sonla bitti!";
+      options.innerHTML = `
+        <button class="option" onclick="restart()">Başa dön</button>
+      `;
+    } else {
+      story.textContent = "Parkta yürürken bir banka oturup dondurma yiyorsun. Çocuklar sana bakıp gülüyor 😆 Hikaye burada bitti!";
+      options.innerHTML = `
+        <button class="option" onclick="restart()">Başa dön</button>
+      `;
+    }
+  } else if (story.textContent.includes("minik marshmallow")) {
+    if (choice === 'iç') {
+      story.textContent = "Kahveyi içtin, ağzın tatlandı ve barista sana küçük bir şapka hediye etti 😎 Hikaye burada bitti!";
+      options.innerHTML = `
+        <button class="option" onclick="restart()">Başa dön</button>
+      `;
+    } else {
+      story.textContent = "Kahveyi attın, etrafa saçıldı ve insanlar şaşkın 😅 Hikaye burada bitti!";
+      options.innerHTML = `
+        <button class="option" onclick="restart()">Başa dön</button>
+      `;
+    }
+  }
+}
+
+function restart() {
+  story.textContent = "Güneşli bir gün, şehirde dolaşıyorsun. Karşında iki yol var: sağa mı sola mı dönüyorsun?";
+  options.innerHTML = `
+    <button class="option" onclick="choose('sağa')">Sağa dön</button>
+    <button class="option" onclick="choose('sola')">Sola dön</button>
+  `;
+}
+</script>
+
 </body>
 </html>
