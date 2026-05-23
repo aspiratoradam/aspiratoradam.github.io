@@ -1,227 +1,291 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Snail March V2</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRITICAL SYSTEM WARNING</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/phaser@3/dist/phaser.js"></script>
+        body, html {
+            background-color: #000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-<style>
-body {
-    margin: 0;
-    overflow: hidden;
-    background: #0b0f0b;
-    font-family: monospace;
-}
-canvas {
-    display: block;
-    margin: auto;
-    image-rendering: pixelated;
-}
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
 
-#ui {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    pointer-events: none;
-    color: white;
-}
+        .active {
+            display: flex;
+        }
 
-#leaderboard {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.6);
-    padding: 10px;
-    border: 1px solid #444;
-    width: 200px;
-}
+        #screen1 {
+            border: 2px solid #ff0000;
+            background: radial-gradient(circle, #1a0000 0%, #000000 100%);
+            color: #ff3333;
+        }
 
-#login {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(#0a0f0a,#000);
-    flex-direction: column;
-    color: white;
-}
+        .warning-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: blink 1s infinite;
+        }
 
-#box {
-    background: rgba(0,0,0,0.8);
-    padding: 20px;
-    border: 2px solid #444;
-    text-align: center;
-}
+        .warning-text {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+            line-height: 1.6;
+        }
 
-input, button {
-    padding: 10px;
-    margin-top: 10px;
-    width: 200px;
-}
+        .btn {
+            background-color: transparent;
+            color: inherit;
+            border: 2px solid currentColor;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
 
-button {
-    cursor: pointer;
-}
-</style>
+        .btn:hover {
+            background-color: #ff3333;
+            color: #000;
+            box-shadow: 0 0 20px #ff3333;
+        }
+
+        #screen3 .btn:hover {
+            background-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+
+        #screen2 {
+            align-items: flex-start;
+            text-align: left;
+            background-color: #050505;
+            overflow: hidden;
+        }
+
+        #terminal {
+            width: 100%;
+            height: 100%;
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: #00ff00;
+            overflow-y: auto;
+        }
+
+        #screen3 {
+            color: #00ff00;
+            background: radial-gradient(circle, #001a00 0%, #000000 100%);
+        }
+
+        #screen4 {
+            position: relative;
+        }
+
+        #countdown {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 30px #00ff00;
+            z-index: 10;
+        }
+
+        .background-matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.15;
+            pointer-events: none;
+            font-size: 0.8rem;
+            text-align: left;
+            overflow: hidden;
+            line-height: 1;
+        }
+
+        #screen5 {
+            background-color: #000;
+            color: #ffff00;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        #screen6 {
+            background-color: #000;
+        }
+
+        .mal-text {
+            font-size: 12rem;
+            font-weight: 900;
+            color: #ff0000;
+            letter-spacing: 10px;
+            transform: scale(0);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, glitch 0.2s infinite alternate;
+            text-shadow: 0 0 50px #ff0000;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes popIn {
+            to { transform: scale(1); }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) skew(0deg); }
+            20% { transform: translate(-5px, 2px) skew(-3deg); }
+            40% { transform: translate(5px, -2px) skew(3deg); }
+            60% { transform: translate(-2px, -2px) skew(1deg); }
+            80% { transform: translate(2px, 2px) skew(-1deg); }
+            100% { transform: translate(0) skew(0deg); }
+        }
+    </style>
 </head>
 <body>
 
-<div id="login">
-    <div id="box">
-        <h2>RETRO KNIGHT</h2>
-        <input id="name" placeholder="Kullanıcı adı" />
-        <br>
-        <button onclick="start()">Başla</button>
+    <div id="screen1" class="screen active">
+        <div class="warning-title">!! GÜVENLİK SIZINTISI ALARMI !!</div>
+        <div class="warning-text">
+            Sisteminizdeki tüm tarayıcı verileri kayıtlı şifreler ve çerezler başarıyla çalınmıştır! eğer silmek istiyorsanız devam edin
+        </div>
+        <button class="btn" onclick="startTerminal()">DEVAM ET</button>
     </div>
-</div>
 
-<div id="ui">
-    <div id="leaderboard"></div>
-</div>
+    <div id="screen2" class="screen">
+        <div id="terminal"></div>
+    </div>
 
-<script>
-let username = "player";
-let score = 0;
-let game;
+    <div id="screen3" class="screen">
+        <div class="warning-title" style="color: #00ff00;">AKTARIM TAMAMLANDI</div>
+        <div class="warning-text">
+            verilerin kalıcı olarak silinmesini istiyor musunuz?
+        </div>
+        <button class="btn" onclick="startCountdown()">VERİLERİ GÜVENLİCE SİL</button>
+    </div>
 
-function start(){
-    username = document.getElementById('name').value || "player";
-    document.getElementById('login').style.display = 'none';
-    init();
-}
+    <div id="screen4" class="screen">
+        <div class="background-matrix" id="matrixBg"></div>
+        <div class="warning-text" style="color: #00ff00; z-index: 10;">VERİTABANI VERİLERİ SİLİNİYOR...</div>
+        <div id="countdown">7</div>
+    </div>
 
-function saveScore(){
-    let data = JSON.parse(localStorage.getItem("rk_scores") || "[]");
+    <div id="screen5" class="screen">
+        <div>BÖYLE BİR ŞEY YOK APTAL :DDDD XD</div>
+    </div>
 
-    let found = data.find(x => x.name === username);
+    <div id="screen6" class="screen">
+        <div class="mal-text">MAL</div>
+    </div>
 
-    if(found){
-        found.score = Math.max(found.score, score);
-    } else {
-        data.push({name: username, score});
-    }
-
-    data.sort((a,b)=>b.score-a.score);
-    data = data.slice(0,10);
-
-    localStorage.setItem("rk_scores", JSON.stringify(data));
-
-    document.getElementById("leaderboard").innerHTML =
-        "<b>🏆 Leaderboard</b><br>" +
-        data.map((p,i)=>`${i+1}. ${p.name} - ${p.score}`).join("<br>");
-}
-
-function init(){
-
-const config = {
-    type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    backgroundColor: '#0b0f0b',
-    physics: { default: 'arcade' },
-    scene: { create, update }
-};
-
-game = new Phaser.Game(config);
-
-let player;
-let cursors;
-let enemies;
-let lastAttack = 0;
-
-function create(){
-
-    this.cameras.main.setBounds(0,0,2000,2000);
-    this.physics.world.setBounds(0,0,2000,2000);
-
-    // ground
-    for(let i=0;i<400;i++){
-        let x = Phaser.Math.Between(0,2000);
-        let y = Phaser.Math.Between(0,2000);
-        this.add.rectangle(x,y,3,3,0x1f3a1f).setAlpha(0.5);
-    }
-
-    player = this.add.rectangle(1000,1000,30,30,0xc2b280);
-    this.physics.add.existing(player);
-    player.body.setCollideWorldBounds(true);
-
-    this.cameras.main.startFollow(player);
-
-    enemies = this.physics.add.group();
-
-    for(let i=0;i<10;i++) spawnEnemy.call(this);
-
-    this.time.addEvent({
-        delay: 1500,
-        loop: true,
-        callback: ()=>spawnEnemy.call(this)
-    });
-
-    cursors = this.input.keyboard.addKeys("W,A,S,D");
-
-    this.input.on('pointerdown', ()=>{
-
-        let now = Date.now();
-        if(now - lastAttack < 250) return;
-        lastAttack = now;
-
-        this.cameras.main.shake(80,0.003);
-
-        enemies.getChildren().forEach(e=>{
-            let d = Phaser.Math.Distance.Between(player.x,player.y,e.x,e.y);
-
-            if(d < 70){
-                e.destroy();
-                score += 10;
-                saveScore();
-            }
-        });
-    });
-
-}
-
-function update(){
-
-    let speed = 250;
-    player.body.setVelocity(0);
-
-    if(cursors.A.isDown) player.body.setVelocityX(-speed);
-    if(cursors.D.isDown) player.body.setVelocityX(speed);
-    if(cursors.W.isDown) player.body.setVelocityY(-speed);
-    if(cursors.S.isDown) player.body.setVelocityY(speed);
-
-    enemies.getChildren().forEach(e=>{
-        this.physics.moveToObject(e, player, 60);
-
-        if(Phaser.Math.Distance.Between(player.x,player.y,e.x,e.y)<20){
-            score = Math.max(0,score-1);
-            saveScore();
+    <script>
+        function switchScreen(hideId, showId) {
+            document.getElementById(hideId).classList.remove('active');
+            document.getElementById(showId).classList.add('active');
         }
-    });
-}
 
-function spawnEnemy(){
+        const hackLines = [
+            "Connecting to local_host:8080...",
+            "Bypassing Windows Defender Firewall... [OK]",
+            "Injecting payload into chrome.exe (PID: 4820)",
+            "Dumping Login Data database...",
+            "Extracting passwords for: Google, Discord, Steam, Instagram...",
+            "Decrypting master key using AES-256-GCM...",
+            "Sending data to anonymous_hacker_server_v4.net",
+            "Uploading: cookies.txt (14.2 KB) -> 100%",
+            "Uploading: login_credentials.db (1.8 MB) -> 100%",
+            "Cleaning logs... [OK]",
+            "Establishing persistent backdoor... Done.",
+            "Execution finished successfully."
+        ];
 
-    const colors=[0x4caf50,0x8d6e63,0x607d8b];
+        function startTerminal() {
+            switchScreen('screen1', 'screen2');
+            const term = document.getElementById('terminal');
+            let lineIndex = 0;
 
-    let e = this.add.rectangle(
-        Phaser.Math.Between(0,2000),
-        Phaser.Math.Between(0,2000),
-        25,25,
-        Phaser.Utils.Array.GetRandom(colors)
-    );
+            function typeLine() {
+                if (lineIndex < hackLines.length) {
+                    term.innerHTML += hackLines[lineIndex] + "\n";
+                    term.scrollTop = term.scrollHeight;
+                    lineIndex++;
+                    setTimeout(typeLine, 350); 
+                } else {
+                    setTimeout(() => {
+                        switchScreen('screen2', 'screen3');
+                    }, 1000);
+                }
+            }
+            typeLine();
+        }
 
-    this.physics.add.existing(e);
-    enemies.add(e);
-}
+        let countdownInterval;
+        let matrixInterval;
 
-}
-</script>
+        function startCountdown() {
+            switchScreen('screen3', 'screen4');
+            
+            const matrixBg = document.getElementById('matrixBg');
+            matrixInterval = setInterval(() => {
+                let randomGarbage = "";
+                for(let i=0; i<150; i++) {
+                    randomGarbage += Math.random().toString(36).substring(2, 7) + " ";
+                }
+                matrixBg.innerHTML += randomGarbage + "<br>";
+                matrixBg.scrollTop = matrixBg.scrollHeight;
+            }, 100);
 
+            let count = 7;
+            const countEl = document.getElementById('countdown');
+            
+            countdownInterval = setInterval(() => {
+                count--;
+                countEl.innerText = count;
+                
+                if (count === 0) {
+                    clearInterval(countdownInterval);
+                    clearInterval(matrixInterval);
+                    triggerTrollPhase();
+                }
+            }, 1000);
+        }
+
+        function triggerTrollPhase() {
+            switchScreen('screen4', 'screen5');
+            
+            setTimeout(() => {
+                switchScreen('screen5', 'screen6');
+            }, 3500);
+        }
+    </script>
 </body>
 </html>
